@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Interfaces\UseCases\MaintenanceIntegration\" />
     <Folder Include="Services\Exceptions\" />
     <Folder Include="Validation\" />
   </ItemGroup>

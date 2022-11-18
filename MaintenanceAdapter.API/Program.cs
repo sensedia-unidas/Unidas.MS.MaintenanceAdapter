@@ -1,5 +1,7 @@
 using Azure.Messaging.ServiceBus;
+using MaintenanceAdapter.API.ViewModels.Requests;
 using MaintenanceAdapter.Application.ViewModels.MessageIntegration.Requests;
+using Newtonsoft.Json;
 using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,17 +23,17 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 
-app.MapPost("/api/integration", async (MessageIntegrationRequest request) =>
+app.MapPost("/api/integration/maintenance_case", async (Object payload) =>
 {
     var connectionString = builder.Configuration["Servicebus:ConnectionStringCaseQueue"];   
     var client = new ServiceBusClient(connectionString);
-    var sender = client.CreateSender("maintenance-case-queue");
-    var body = JsonSerializer.Serialize(request);
-    var message = new ServiceBusMessage(body);
+    var sender = client.CreateSender("maintenance-case-queue");    
+        
+    var message = new ServiceBusMessage(payload.ToString());
+    message.ContentType = "application/json";
     await sender.SendMessageAsync(message);
 
-
-
 });
+
 
 app.Run();
